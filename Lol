@@ -1365,3 +1365,23 @@ Players.PlayerAdded:Connect(onPlayerAdded)
 if player then
     onPlayerAdded()
 end
+
+local function onCharacterDied()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            lastDeathPosition = humanoidRootPart.Position
+        end
+    end
+end
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid").Died:Connect(onCharacterDied)
+    onCharacterAdded(character)
+end)
+
+if game.Players.LocalPlayer.Character then
+    game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(onCharacterDied)
+    onCharacterAdded(game.Players.LocalPlayer.Character)
+end
